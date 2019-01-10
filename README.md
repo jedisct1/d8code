@@ -1,6 +1,6 @@
 # d8code
 
-Encode binary data as a UTF-8 string that compresses efficiently.
+Encode binary data as a UTF-8 string that may compress efficiently.
 
 It may be an interesting alternative to base64 and hex encoding to
 inline WebAssembly code in a Javascript module.
