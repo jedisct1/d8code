@@ -1,6 +1,6 @@
 "use strict";
 
-const PSHIFT = 32;
+const DEFAULT_PSHIFT = 32;
 
 /**
  * Encodes binary data as UTF-8, returns it as a `Uint8Array`
@@ -13,11 +13,12 @@ const PSHIFT = 32;
  * @param bin Binary input (Uint8Array)
  * @param s1 Character code to avoid in the output
  * @param s2 Second character code to avoid in the output
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-export function encode(bin: Uint8Array, s1: number = 34, s2: number = 92): Uint8Array {
+export function encode(bin: Uint8Array, s1: number = 34, s2: number = 92, pshift = DEFAULT_PSHIFT): Uint8Array {
     const encoded: number[] = [];
     bin.forEach((b) => {
-        b += PSHIFT;
+        b += pshift;
         if (b === s1 || b === s2) {
             b += 0x100;
         }
@@ -41,9 +42,10 @@ export function encode(bin: Uint8Array, s1: number = 34, s2: number = 92): Uint8
  * @param bin Binary input (Uint8Array)
  * @param s1 Character code to avoid in the output
  * @param s2 Second character code to avoid in the output
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-export function encodeToString(bin: Uint8Array, s1: number = 34, s2: number = 92): string {
-    return (new TextDecoder("utf-8")).decode(encode(bin));
+export function encodeToString(bin: Uint8Array, s1: number = 34, s2: number = 92, pshift = DEFAULT_PSHIFT): string {
+    return (new TextDecoder("utf-8")).decode(encode(bin, pshift));
 }
 
 /**
@@ -51,8 +53,9 @@ export function encodeToString(bin: Uint8Array, s1: number = 34, s2: number = 92
  *
  * @returns Decoded data, as a `Uint8Array`
  * @param encoded Encoded data, as a `Uint8Array`
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-export function decode(encoded: Uint8Array): Uint8Array {
+export function decode(encoded: Uint8Array, pshift = DEFAULT_PSHIFT): Uint8Array {
     const bin: number[] = [];
     let shift = 0;
     encoded.forEach((c) => {
@@ -63,10 +66,10 @@ export function decode(encoded: Uint8Array): Uint8Array {
             shift = ((c - 0xc2) << 6) + 0x80;
         } else {
             const c2 = (c & 0x7f) + shift;
-            if (c2 < PSHIFT || c2 > PSHIFT + 0x17f) {
+            if (c2 < pshift || c2 > pshift + 0x17f) {
                 throw new Error("Parse error");
             }
-            bin.push((c2 - PSHIFT) & 0xff);
+            bin.push((c2 - pshift) & 0xff);
             shift = 0;
         }
     });
@@ -78,7 +81,8 @@ export function decode(encoded: Uint8Array): Uint8Array {
  *
  * @returns Decoded data, as a `Uint8Array`
  * @param encoded Encoded data, as a `string`
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-export function decodeFromString(encoded: string): Uint8Array {
-    return decode((new TextEncoder()).encode(encoded));
+export function decodeFromString(encoded: string, pshift = DEFAULT_PSHIFT): Uint8Array {
+    return decode((new TextEncoder()).encode(encoded), pshift);
 }

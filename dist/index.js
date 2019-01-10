@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var PSHIFT = 32;
+var DEFAULT_PSHIFT = 32;
 /**
  * Encodes binary data as UTF-8, returns it as a `Uint8Array`
  *
@@ -12,13 +12,15 @@ var PSHIFT = 32;
  * @param bin Binary input (Uint8Array)
  * @param s1 Character code to avoid in the output
  * @param s2 Second character code to avoid in the output
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-function encode(bin, s1, s2) {
+function encode(bin, s1, s2, pshift) {
     if (s1 === void 0) { s1 = 34; }
     if (s2 === void 0) { s2 = 92; }
+    if (pshift === void 0) { pshift = DEFAULT_PSHIFT; }
     var encoded = [];
     bin.forEach(function (b) {
-        b += PSHIFT;
+        b += pshift;
         if (b === s1 || b === s2) {
             b += 0x100;
         }
@@ -43,11 +45,13 @@ exports.encode = encode;
  * @param bin Binary input (Uint8Array)
  * @param s1 Character code to avoid in the output
  * @param s2 Second character code to avoid in the output
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-function encodeToString(bin, s1, s2) {
+function encodeToString(bin, s1, s2, pshift) {
     if (s1 === void 0) { s1 = 34; }
     if (s2 === void 0) { s2 = 92; }
-    return (new TextDecoder("utf-8")).decode(encode(bin));
+    if (pshift === void 0) { pshift = DEFAULT_PSHIFT; }
+    return (new TextDecoder("utf-8")).decode(encode(bin, pshift));
 }
 exports.encodeToString = encodeToString;
 /**
@@ -55,8 +59,10 @@ exports.encodeToString = encodeToString;
  *
  * @returns Decoded data, as a `Uint8Array`
  * @param encoded Encoded data, as a `Uint8Array`
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-function decode(encoded) {
+function decode(encoded, pshift) {
+    if (pshift === void 0) { pshift = DEFAULT_PSHIFT; }
     var bin = [];
     var shift = 0;
     encoded.forEach(function (c) {
@@ -68,10 +74,10 @@ function decode(encoded) {
         }
         else {
             var c2 = (c & 0x7f) + shift;
-            if (c2 < PSHIFT || c2 > PSHIFT + 0x17f) {
+            if (c2 < pshift || c2 > pshift + 0x17f) {
                 throw new Error("Parse error");
             }
-            bin.push((c2 - PSHIFT) & 0xff);
+            bin.push((c2 - pshift) & 0xff);
             shift = 0;
         }
     });
@@ -83,9 +89,11 @@ exports.decode = decode;
  *
  * @returns Decoded data, as a `Uint8Array`
  * @param encoded Encoded data, as a `string`
+ * @param pshift Minimum character code to emit (should be >= 32)
  */
-function decodeFromString(encoded) {
-    return decode((new TextEncoder()).encode(encoded));
+function decodeFromString(encoded, pshift) {
+    if (pshift === void 0) { pshift = DEFAULT_PSHIFT; }
+    return decode((new TextEncoder()).encode(encoded), pshift);
 }
 exports.decodeFromString = decodeFromString;
 //# sourceMappingURL=index.js.map
