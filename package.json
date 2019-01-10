@@ -1,0 +1,31 @@
+{
+  "name": "d8code",
+  "version": "1.0.0",
+  "description": "Encode binary data as a UTF-8 string that compresses efficiently",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jedisct1/d8code.git"
+  },
+  "keywords": [
+    "encoding",
+    "string",
+    "binary",
+    "javascript",
+    "typescript",
+    "compression",
+    "webassembly"
+  ],
+  "author": "Frank Denis <npm@pureftpd.org>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jedisct1/d8code/issues"
+  },
+  "homepage": "https://github.com/jedisct1/d8code#readme",
+  "devDependencies": {
+    "typescript": "^3.2.2"
+  }
+}
