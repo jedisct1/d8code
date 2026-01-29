@@ -45,7 +45,7 @@ export function encode(bin: Uint8Array, s1: number = 34, s2: number = 92, pshift
  * @param pshift Minimum character code to emit (should be >= 32)
  */
 export function encodeToString(bin: Uint8Array, s1: number = 34, s2: number = 92, pshift = DEFAULT_PSHIFT): string {
-    return (new TextDecoder("utf-8")).decode(encode(bin, pshift));
+    return (new TextDecoder("utf-8")).decode(encode(bin, s1, s2, pshift));
 }
 
 /**
