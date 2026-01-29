@@ -1,0 +1,17 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.3.13/schema.json",
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "style": {
+        "noNonNullAssertion": "off"
+      }
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 4
+  }
+}
