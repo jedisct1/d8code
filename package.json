@@ -1,6 +1,6 @@
 {
   "name": "d8code",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Encode binary data as a UTF-8 string that compresses efficiently",
   "main": "dist/index.js",
   "scripts": {
