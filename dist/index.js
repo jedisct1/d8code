@@ -1,5 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.encode = encode;
+exports.encodeToString = encodeToString;
+exports.decode = decode;
+exports.decodeFromString = decodeFromString;
 var DEFAULT_PSHIFT = 32;
 /**
  * Encodes binary data as UTF-8, returns it as a `Uint8Array`
@@ -33,7 +37,6 @@ function encode(bin, s1, s2, pshift) {
     });
     return new Uint8Array(encoded);
 }
-exports.encode = encode;
 /**
  * Encodes binary data as UTF-8, returns it as a `string`
  *
@@ -51,9 +54,8 @@ function encodeToString(bin, s1, s2, pshift) {
     if (s1 === void 0) { s1 = 34; }
     if (s2 === void 0) { s2 = 92; }
     if (pshift === void 0) { pshift = DEFAULT_PSHIFT; }
-    return (new TextDecoder("utf-8")).decode(encode(bin, pshift));
+    return new TextDecoder("utf-8").decode(encode(bin, s1, s2, pshift));
 }
-exports.encodeToString = encodeToString;
 /**
  * Decode binary data encoded as UTF-8
  *
@@ -83,7 +85,6 @@ function decode(encoded, pshift) {
     });
     return new Uint8Array(bin);
 }
-exports.decode = decode;
 /**
  * Decode binary data encoded as UTF-8, provided as a string
  *
@@ -93,7 +94,6 @@ exports.decode = decode;
  */
 function decodeFromString(encoded, pshift) {
     if (pshift === void 0) { pshift = DEFAULT_PSHIFT; }
-    return decode((new TextEncoder()).encode(encoded), pshift);
+    return decode(new TextEncoder().encode(encoded), pshift);
 }
-exports.decodeFromString = decodeFromString;
 //# sourceMappingURL=index.js.map
