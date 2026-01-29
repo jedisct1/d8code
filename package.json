@@ -4,7 +4,7 @@
   "description": "Encode binary data as a UTF-8 string that compresses efficiently",
   "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "bun test",
     "lint": "biome check src/",
     "format": "biome check --write src/"
   },
